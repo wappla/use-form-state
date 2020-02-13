@@ -106,7 +106,7 @@ From the example above, as the user submits the form, the `formState` object wil
 ```js
 {
     values: {
-        email: 'development@wappla.com',
+        email: 'testing@example.com',
         password: '123456789',
     },
     errors: [],
