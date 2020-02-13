@@ -1,0 +1,7 @@
+dev
+dist
+node_modules
+.DS_Store
+.npmrc
+*.log
+package-lock.json
