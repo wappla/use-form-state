@@ -9,7 +9,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/wappla/useFormState.git"
+    "url": "git+https://github.com/wappla/use-form-state.git"
   },
   "author": {
     "name": "Wappla",
@@ -22,11 +22,11 @@
     "form",
     "state"
   ],
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
-    "url": "https://github.com/wappla/useFormState/issues"
+    "url": "https://github.com/wappla/use-form-state/issues"
   },
-  "homepage": "https://github.com/wappla/useFormState#readme",
+  "homepage": "https://github.com/wappla/use-form-state#readme",
   "peerDependencies": {
     "react": ">=16.12"
   },
