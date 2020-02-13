@@ -2,7 +2,7 @@ import { useReducer } from 'react'
 import dotProp from 'dot-prop-immutable'
 import clonedeep from 'lodash.clonedeep'
 import useDeepCompareEffect from 'use-deep-compare-effect'
-import { containsNoErrors } from './utils';
+import { containsNoErrors } from './utils'
 
 const INITIAL_STATE = {
     values: {},
