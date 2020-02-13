@@ -1,6 +1,6 @@
 {
   "name": "use-form-state",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "React hook for managing form and input state and form validation.",
   "main": "index.js",
   "scripts": {
