@@ -1,14 +1,76 @@
-<h1 align="center">
-    Wappla - useFormState
-</h1>
+<h1 align="center">use-form-state</h1>
+<div align="center">
 
-## Motivation
+[![Current release](https://img.shields.io/npm/wappla/use-form-state.svg)](https://www.npmjs.com/package/use-form-state)  [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](https://github.com/wappla/use-form-state/blob/master/LICENSE)  [![GitHub pull-requests](https://img.shields.io/github/issues-pr/wappla/use-form-state.svg?style=flat-square)](https://github.com/wappla/use-form-state/pulls/)  [![GitHub issues](https://img.shields.io/github/issues/wappla/use-form-state.svg?style=flat-square)](https://github.com/wappla/use-form-state/issues/)
+  <h3>
+    <a href="#getting-started">
+      Installation
+    </a>
+    <span> | </span>
+    <a href="#contributing">
+      Contributing
+    </a>
+    <span> | </span>
+    <a href="#license">
+      License
+    </a>
+  </h3>
+    <sub>Built with ❤︎ by
+  <a href="#about-us">Wappla</a> and
+  <a href="https://github.com/wappla/use-form-state/graphs/contributors">
+    contributors
+  </a>
+</div>
 
-Managing form state in React can be unwieldy sometimes. There are plenty of great solutions already available that make managing forms state a breeze. But like every other package they mostly just don't completely cover your specific needs. So we decided to create or own custom hook with additional form validation!
+<details>
+    <summary>Table of Contents</summary>
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
-Luckily, the recent introduction of [React Hooks](https://reactjs.org/docs/hooks-intro.html) and the ability to write custom hooks have enabled new possibilities when it comes sharing state logic. Form state is no exception!
 
-`use-form-state` is a small React Hook that attempts to [simplify managing form state](#examples), using the native form input elements you are familiar with, but also with the opportunity to use it on custom input elements.
+- [Getting Started](#getting-started)
+- [Examples](#examples)
+  - [Basic Usage](#basic-usage)
+- [API](#api)
+  - [useFormState](#useformstate)
+    - [initialValues](#initialvalues)
+    - [formOptions](#formoptions)
+      - [formOptions.validation](#formoptionsvalidation)
+      - [formOptions.validationOptions](#formoptionsvalidationoptions)
+      - [formOptions.valuesToInput](#formoptionsvaluestoinput)
+      - [formOptions.debug](#formoptionsdebug)
+    - [values](#values)
+    - [errors](#errors)
+    - [isDirty](#isdirty)
+    - [isValid](#isvalid)
+    - [isPristine](#ispristine)
+    - [setValues](#setvalues)
+    - [handleChange](#handlechange)
+    - [handleNativeChange](#handlenativechange)
+    - [validate](#validate)
+    - [updateErrors](#updateerrors)
+    - [resetForm](#resetform)
+    - [getInputProps](#getinputprops)
+    - [getNativeInputProps](#getnativeinputprops)
+    - [valuesToInput](#valuestoinput)
+    - [getValue](#getvalue)
+    - [getErrorMessages](#geterrormessages)
+    - [hasError](#haserror)
+  - [createFormValidation](#createformvalidation)
+    - [path](#path)
+    - [validate](#validate-1)
+      - [validate.currentValue](#validatecurrentvalue)
+      - [validate.allValues](#validateallvalues)
+      - [validate.validationOptions](#validatevalidationoptions)
+    - [message](#message)
+- [Contributing](#contributing)
+- [Versioning](#versioning)
+- [Authors](#authors)
+- [About us](#about-us)
+- [License](#license)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+</details>
 
 ## Getting Started
 
@@ -227,3 +289,26 @@ Second argument includes all the values from the formState.
 The `message` you want to display near the form input to show the user what went wrong.
 
 *Default*: 'Invalid'
+
+## Contributing
+
+Please read [CONTRIBUTING.md](https://github.com/wappla/use-form-state) for details on our code of conduct, and the process for submitting pull requests to us.
+
+## Versioning
+
+We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/wappla/use-form-state/tags). 
+
+## Authors
+
+* **Sander Peeters** - *Initial work* - [Sander Peeters](https://github.com/SanderPeeters)
+
+See also the list of [contributors](https://github.com/wappla/use-form-state/graphs/contributors) who participated in this project.
+
+## About us
+
+[Wappla BVBA](https://www.wappla.com/)
+We shape, build and grow ambitious digital products.
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE.md](https://github.com/wappla/use-form-state/blob/master/LICENSE) file for details
