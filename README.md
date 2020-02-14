@@ -2,20 +2,6 @@
 <div align="center">
 
 [![Current release](https://img.shields.io/npm/v/use-form-state.svg)](https://www.npmjs.com/package/use-form-state)  [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](https://github.com/wappla/use-form-state/blob/master/LICENSE)  [![GitHub pull-requests](https://img.shields.io/github/issues-pr/wappla/use-form-state.svg?style=flat-square)](https://github.com/wappla/use-form-state/pulls/)  [![GitHub issues](https://img.shields.io/github/issues/wappla/use-form-state.svg?style=flat-square)](https://github.com/wappla/use-form-state/issues/)
-
-  <h3>
-    <a href="#getting-started">
-      Installation
-    </a>
-    <span> | </span>
-    <a href="#contributing">
-      Contributing
-    </a>
-    <span> | </span>
-    <a href="#license">
-      License
-    </a>
-  </h3>
     <sub>
         Built with ❤︎ by
         <a href="#about-us">Wappla</a> and
