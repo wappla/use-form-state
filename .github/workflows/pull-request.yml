@@ -1,0 +1,19 @@
+name: Pull request
+
+on: [pull_request]
+
+jobs:
+  test:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup Node.js for use with actions
+      uses: actions/setup-node@v1.1.0
+      with:
+        version: 10.x
+    - name: NPM or Yarn install with caching
+      uses: bahmutov/npm-install@v1.1.0
+    - name: Run npm tests
+      run: npm test
