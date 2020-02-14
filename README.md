@@ -209,23 +209,87 @@ When set to `true`, `useFormState` will log its state to the console when change
 
 *Default:* false
 
-#### values
-#### errors
-#### isDirty
-#### isValid
-#### isPristine
-#### setValues
-#### handleChange
-#### handleNativeChange
-#### validate
-#### updateErrors
-#### resetForm
-#### getInputProps
-#### getNativeInputProps
-#### valuesToInput
-#### getValue
-#### getErrorMessages
-#### hasError
+#### formState.values
+Object containing all key-value pairs for the form inputs.
+
+*Example:*
+```js
+{
+    firstName: 'John',
+    lastName: 'Doe',
+    email: 'johndoe@example.com',
+    interests: [],
+    isMarried: true,
+}
+```
+
+*Default:* `{}`
+
+#### formState.errors
+Array containing all the error objects for the invalid form inputs based on the validator created by the [createFormValidation](#createFormValidation).
+
+*Example:*
+```js
+[{
+    path: 'firstName',
+    message: 'First name is a required input field.',
+}, {
+    path: 'lastName',
+    message: 'Last name is a required input field.',
+}, {
+    path: 'interests',
+    message: 'You should at least have one interest.',
+}]
+```
+
+*Default:* `[]`
+
+#### formState.isDirty
+Boolean you can use to check if the user has changed input fields.
+
+*Default:* `false`
+
+#### formState.isValid
+Boolean you can use to check if the form is valid.
+
+*Default:* `false`
+
+#### formState.isPristine
+Boolean you can use to check if the form is submitted. Will be set to `false` on [formState.validate()](#validate)
+
+*Default:* `true`
+
+#### formState.setValues
+This method can be used to set multiple values on one event. This will trigger just one state update.
+
+*Example:*
+```jsx
+import useFormState from 'use-form-state'
+
+export const Form = ({ onSubmit }) => {
+    const { 
+        getNativeInputProps,
+    } = useFormState()
+
+    return (
+        <form onSubmit={onSubmit}>
+            // TODO
+        </form>
+    )
+}
+```
+
+#### formState.handleChange
+#### formState.handleNativeChange
+#### formState.validate
+#### formState.updateErrors
+#### formState.resetForm
+#### formState.getInputProps
+#### formState.getNativeInputProps
+#### formState.valuesToInput
+#### formState.getValue
+#### formState.getErrorMessages
+#### formState.hasError
 
 ### createFormValidation
 
