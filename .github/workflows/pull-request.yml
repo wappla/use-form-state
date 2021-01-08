@@ -14,6 +14,6 @@ jobs:
       with:
         version: 10.x
     - name: NPM or Yarn install with caching
-      uses: bahmutov/npm-install@v1.1.0
+      uses: bahmutov/npm-install@v1.6.2
     - name: Run npm tests
       run: npm test
