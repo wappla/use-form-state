@@ -62,6 +62,10 @@ it('useFormState does not update the initial state when the dependencies remains
 
 it('restForm updates the the state correct.', () => {
     const initialValues = {
+        firstName: '',
+        lastName: '',
+    }
+    const valuesToStart = {
         firstName: 'test',
         lastName: 'form',
     }
@@ -74,6 +78,11 @@ it('restForm updates the the state correct.', () => {
     expect(Array.isArray(result.current.errors)).toBe(true)
     expect(result.current.errors.length).toBe(0)
     act(() => {
+        result.current.setValues(valuesToStart)
+    })
+    expect(result.current.values.firstName).toBe(valuesToStart.firstName)
+    expect(result.current.values.lastName).toBe(valuesToStart.lastName)
+    act(() => {
         result.current.setValues(valuesToUpdate)
         result.current.resetForm()
     })
@@ -85,6 +94,10 @@ it('restForm updates the the state correct.', () => {
 
 it('setValues updates the the state correct.', () => {
     const initialValues = {
+        firstName: '',
+        lastName: '',
+    }
+    const valuesToStart = {
         firstName: 'test',
         lastName: 'form',
     }
@@ -98,9 +111,14 @@ it('setValues updates the the state correct.', () => {
     expect(Array.isArray(result.current.errors)).toBe(true)
     expect(result.current.errors.length).toBe(0)
     act(() => {
+        result.current.setValues(valuesToStart)
+    })
+    expect(result.current.values.firstName).toBe(valuesToStart.firstName)
+    expect(result.current.values.lastName).toBe(valuesToStart.lastName)
+    act(() => {
         result.current.setValues(valuesToUpdate)
     })
-    expect(result.current.values.firstName).toBe(initialValues.firstName)
+    expect(result.current.values.firstName).toBe(valuesToStart.firstName)
     expect(result.current.values.lastName).toBe(valuesToUpdate.lastName)
     expect(result.current.values.age).toBe(valuesToUpdate.age)
     expect(Array.isArray(result.current.errors)).toBe(true)
@@ -109,11 +127,20 @@ it('setValues updates the the state correct.', () => {
 
 it('handleChange updates the the state correct.', () => {
     const initialValues = {
+        name: '',
+    }
+    const valuesToStart = {
         name: 'test',
     }
     const newName = 'hook'
     const { result } = renderHook(() => useFormState(initialValues))
     expect(result.current.values.name).toBe(initialValues.name)
+    expect(Array.isArray(result.current.errors)).toBe(true)
+    expect(result.current.errors.length).toBe(0)
+    act(() => {
+        result.current.setValues(valuesToStart)
+    })
+    expect(result.current.values.name).toBe(valuesToStart.name)
     expect(Array.isArray(result.current.errors)).toBe(true)
     expect(result.current.errors.length).toBe(0)
     act(() => {
@@ -126,12 +153,18 @@ it('handleChange updates the the state correct.', () => {
 
 it('getInputProps return correct props.', () => {
     const initialValues = {
+        name: '',
+    }
+    const valuesToStart = {
         name: 'test',
     }
     const newName = 'hook'
     const { result } = renderHook(() => useFormState(initialValues))
+    act(() => {
+        result.current.setValues(valuesToStart)
+    })
     const props = result.current.getInputProps('name')
-    expect(props.value).toBe(initialValues.name)
+    expect(props.value).toBe(valuesToStart.name)
     expect(props.hasError).toBe(false)
     expect(props.name).toBe('name')
     act(() => {
@@ -145,12 +178,18 @@ it('getInputProps return correct props.', () => {
 
 it('getNativeInputProps return correct props for text input.', () => {
     const initialValues = {
+        name: '',
+    }
+    const valuesToStart = {
         name: 'test',
     }
     const newName = 'hook'
     const { result } = renderHook(() => useFormState(initialValues))
+    act(() => {
+        result.current.setValues(valuesToStart)
+    })
     const props = result.current.getNativeInputProps('name')
-    expect(props.value).toBe(initialValues.name)
+    expect(props.value).toBe(valuesToStart.name)
     expect(props.hasError).toBe(false)
     expect(props.name).toBe('name')
     act(() => {
@@ -169,6 +208,10 @@ it('getNativeInputProps return correct props for text input.', () => {
 
 it('calling handleChange twice updates the the state correct.', () => {
     const initialValues = {
+        firstName: '',
+        lastName: '',
+    }
+    const valuesToStart = {
         firstName: 'test',
         lastName: 'hook',
     }
@@ -180,7 +223,20 @@ it('calling handleChange twice updates the the state correct.', () => {
     expect(Array.isArray(result.current.errors)).toBe(true)
     expect(result.current.errors.length).toBe(0)
     act(() => {
+        result.current.setValues(valuesToStart)
+    })
+    expect(result.current.values.firstName).toBe(valuesToStart.firstName)
+    expect(result.current.values.lastName).toBe(valuesToStart.lastName)
+    expect(Array.isArray(result.current.errors)).toBe(true)
+    expect(result.current.errors.length).toBe(0)
+    act(() => {
         result.current.handleChange('firstName', newFirstName)
+    })
+    expect(result.current.values.firstName).toBe(newFirstName)
+    expect(result.current.values.lastName).toBe(valuesToStart.lastName)
+    expect(Array.isArray(result.current.errors)).toBe(true)
+    expect(result.current.errors.length).toBe(0)
+    act(() => {
         result.current.handleChange('lastName', newLastName)
     })
     expect(result.current.values.firstName).toBe(newFirstName)
@@ -202,6 +258,10 @@ it('validate updates the state correctly.', () => {
     const weakPassword = 'password'
     const initialValues = {
         userName: '',
+        password: '',
+        repeatPassword: '',
+    }
+    const valuesToStart = {
         password: weakPassword,
         repeatPassword: weakPassword,
     }
@@ -219,7 +279,7 @@ it('validate updates the state correctly.', () => {
         },
         {
             path: 'repeatPassword',
-            validate: (repeatPassword, values) => repeatPassword !== values.password,
+            validate: (repeatPassword, values) => repeatPassword === values.password,
             message,
         },
     ])
@@ -234,14 +294,29 @@ it('validate updates the state correctly.', () => {
         result.current.validate()
     })
     expect(Array.isArray(result.current.errors)).toBe(true)
-    expect(result.current.errors.length).toBe(3)
+    expect(result.current.errors.length).toBe(1)
+    expect(result.current.errors).toContainObject({ path: 'userName', message })
+    act(() => {
+        result.current.setValues(valuesToStart)
+    })
+    expect(result.current.values.userName).toBe(initialValues.userName)
+    expect(result.current.values.password).toBe(valuesToStart.password)
+    expect(result.current.values.repeatPassword).toBe(valuesToStart.repeatPassword)
+    act(() => {
+        result.current.validate()
+    })
+    expect(Array.isArray(result.current.errors)).toBe(true)
+    expect(result.current.errors.length).toBe(2)
     expect(result.current.errors).toContainObject({ path: 'userName', message })
     expect(result.current.errors).toContainObject({ path: 'password', message })
-    expect(result.current.errors).toContainObject({ path: 'repeatPassword', message })
 })
 
 it('handleChange updates the the state correct when the form is dirty.', () => {
     const initialValues = {
+        firstName: '',
+        lastName: '',
+    }
+    const valuesToStart = {
         firstName: 'test',
         lastName: 'test',
     }
@@ -259,11 +334,23 @@ it('handleChange updates the the state correct when the form is dirty.', () => {
     expect(Array.isArray(result.current.errors)).toBe(true)
     expect(result.current.errors.length).toBe(0)
     act(() => {
+        result.current.setValues(valuesToStart)
+    })
+    expect(result.current.values.firstName).toBe(valuesToStart.firstName)
+    expect(result.current.values.lastName).toBe(valuesToStart.lastName)
+    expect(Array.isArray(result.current.errors)).toBe(true)
+    expect(result.current.errors.length).toBe(0)
+    act(() => {
         result.current.validate()
+    })
+    expect(result.current.values.lastName).toBe(valuesToStart.lastName)
+    expect(Array.isArray(result.current.errors)).toBe(true)
+    expect(result.current.errors.length).toBe(0)
+    act(() => {
         result.current.handleChange('firstName', null)
     })
     expect(result.current.values.firstName).toBe(null)
-    expect(result.current.values.lastName).toBe(initialValues.lastName)
+    expect(result.current.values.lastName).toBe(valuesToStart.lastName)
     expect(Array.isArray(result.current.errors)).toBe(true)
     expect(result.current.errors.length).toBe(1)
     expect(result.current.errors).toContainObject({ path: 'firstName', message })
@@ -271,6 +358,10 @@ it('handleChange updates the the state correct when the form is dirty.', () => {
 
 it('setValues updates the the state correct when the form is dirty.', () => {
     const initialValues = {
+        firstName: '',
+        lastName: '',
+    }
+    const valuesToStart = {
         firstName: 'test',
         lastName: 'form',
     }
@@ -290,6 +381,13 @@ it('setValues updates the the state correct when the form is dirty.', () => {
     const { result } = renderHook(() => useFormState(initialValues, { validation }))
     expect(result.current.values.firstName).toBe(initialValues.firstName)
     expect(result.current.values.lastName).toBe(initialValues.lastName)
+    expect(Array.isArray(result.current.errors)).toBe(true)
+    expect(result.current.errors.length).toBe(0)
+    act(() => {
+        result.current.setValues(valuesToStart)
+    })
+    expect(result.current.values.firstName).toBe(valuesToStart.firstName)
+    expect(result.current.values.lastName).toBe(valuesToStart.lastName)
     expect(Array.isArray(result.current.errors)).toBe(true)
     expect(result.current.errors.length).toBe(0)
     act(() => {
@@ -461,6 +559,10 @@ it('Validation can handle validationOption changes', () => {
     }
 
     const initialValues = {
+        name: '',
+        partnerName: '',
+    }
+    const valuesToUpdate = {
         name: 'test',
         partnerName: 'test',
     }
@@ -487,8 +589,10 @@ it('Validation can handle validationOption changes', () => {
     expect(Array.isArray(result.current.formState.errors)).toBe(true)
     expect(result.current.formState.errors.length).toBe(0)
     act(() => {
+        result.current.formState.setValues(valuesToUpdate)
         result.current.setHasPartner(false)
     })
+    expect(result.current.formState.values.name).toBe(valuesToUpdate.name)
     act(() => {
         result.current.formState.validate()
     })
