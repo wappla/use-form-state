@@ -40,6 +40,7 @@ export function createFieldValidation(
         }
         const value = dotProp.get(values, path)
         if (typeof value !== 'undefined' && !validate(value, values, options)) {
+            // TODO: fix this
             let finalMessage = defaultMessage
             if (typeof message === 'function') {
                 finalMessage = message(value, values, options)
