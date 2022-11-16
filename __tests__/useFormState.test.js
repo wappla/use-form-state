@@ -579,5 +579,73 @@ it('Validation can handle validation specified paths to show error', () => {
     expect(Array.isArray(result.current.errors)).toBe(true)
     expect(result.current.errors).toContainObject({ path: 'name', message })
     expect(result.current.errors.length).toBe(1)
+})
 
+it('Validation can handle validation specified nested paths to show error', () => {
+    const initialValues = {
+        name: '',
+        addresses: [{
+            street: '',
+        }, {
+            street: '',
+        }],
+    }
+    const message = 'Invalid'
+    const validation = createFormValidation([
+        {
+            path: 'name',
+            validate: (name) => name !== '',
+            message,
+        },
+        {
+            path: 'addresses.*.street',
+            validate: (street) => street !== '',
+            message,
+        },
+    ])
+
+    const { result } = (
+        renderHook(() => useFormState(initialValues, { validation }))
+    )
+
+    act(() => {
+        result.current.validate(['name', 'addresses.*.street'])
+    })
+    expect(result.current.errors).toContainObject({ path: 'name', message })
+    expect(result.current.errors).toContainObject({ path: 'addresses.0.street', message })
+    expect(result.current.errors).toContainObject({ path: 'addresses.1.street', message })
+    expect(result.current.errors.length).toBe(3)
+})
+
+it('Validation can handle validation specified nested paths to validate', () => {
+    const initialValues = {
+        name: 'test',
+        addresses: [{
+            street: 'test',
+        }, {
+            street: 'test',
+        }],
+    }
+    const message = 'Invalid'
+    const validation = createFormValidation([
+        {
+            path: 'name',
+            validate: (name) => name !== '',
+            message,
+        },
+        {
+            path: 'addresses.*.street',
+            validate: (street) => street !== '',
+            message,
+        },
+    ])
+
+    const { result } = (
+        renderHook(() => useFormState(initialValues, { validation }))
+    )
+
+    act(() => {
+        result.current.validate(['name', 'addresses.*.street'])
+    })
+    expect(result.current.errors.length).toBe(0)
 })

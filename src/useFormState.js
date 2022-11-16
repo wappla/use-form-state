@@ -2,7 +2,7 @@ import { useReducer } from 'react'
 import dotProp from 'dot-prop-immutable'
 import clonedeep from 'lodash.clonedeep'
 import useDeepCompareEffect from 'use-deep-compare-effect'
-import { containsNoErrors } from './utils'
+import { containsNoErrors, flatten } from './utils'
 
 const INITIAL_STATE = {
     values: {},
@@ -25,6 +25,11 @@ const getValuesToValidate = (formValues, paths) => {
     }
     return paths.reduce((obj, field) => {
         const newObj = obj
+        if (field.includes('*')) {
+            const pathParts = field.split('.*.')
+            const [rootPart] = pathParts
+            newObj[rootPart] = dotProp.get(formValues, rootPart)
+        }
         if (typeof formValues[field] !== 'undefined') {
             newObj[field] = formValues[field]
         }
