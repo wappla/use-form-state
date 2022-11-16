@@ -19,6 +19,19 @@ const UPDATE_ERRORS = 'UPDATE_ERRORS'
 const VALIDATE = 'VALIDATE'
 const RESET_FORM = 'RESET_FORM'
 
+const getValuesToValidate = (formValues, paths) => {
+    if (!paths.length) {
+        return formValues
+    }
+    return paths.reduce((obj, field) => {
+        const newObj = obj
+        if (typeof formValues[field] !== 'undefined') {
+            newObj[field] = formValues[field]
+        }
+        return newObj
+    }, {})
+}
+
 const reducer = (state, action) => {
     const {
         validation,
@@ -60,7 +73,10 @@ const reducer = (state, action) => {
             return dotProp.set(state, 'errors', errors)
         }
         case VALIDATE: {
-            const errors = validation(state.values, validationOptions)
+            const { paths } = action
+
+            const valuesToValidate = getValuesToValidate(state.values, paths)
+            const errors = validation(valuesToValidate, validationOptions)
             const isValid = containsNoErrors(errors)
             return {
                 ...state,
@@ -169,11 +185,14 @@ const useFormState = (
         setValue(name, finalValue)
     }
 
-    const validate = () => {
-        const errors = validation(state.values, validationOptions)
+    const validate = (paths = []) => {
+        const valuesToValidate = getValuesToValidate(state.values, paths)
+        const errors = validation(valuesToValidate, validationOptions)
+
         const isValid = containsNoErrors(errors)
         dispatch({
             type: VALIDATE,
+            paths,
         })
         return isValid
     }
