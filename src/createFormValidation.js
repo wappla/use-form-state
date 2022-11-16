@@ -25,10 +25,7 @@ export function createFieldValidation(
         if (path.includes('*')) {
             const pathParts = path.split('.*.')
             const [rootPart] = pathParts
-            const rootValue = dotProp.get(values, rootPart)
-            if (!rootValue) {
-                return []
-            }
+            const rootValue = dotProp.get(values, rootPart) || []
             return rootValue
                 .map((nestedValues, i) => {
                     const validation = createFieldValidation(validate, message, defaultMessage)

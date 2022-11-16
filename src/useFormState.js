@@ -31,7 +31,6 @@ const getValuesToValidate = (formValues, paths) => {
         return newObj
     }, {})
 }
-
 const reducer = (state, action) => {
     const {
         validation,
@@ -74,7 +73,6 @@ const reducer = (state, action) => {
         }
         case VALIDATE: {
             const { paths } = action
-
             const valuesToValidate = getValuesToValidate(state.values, paths)
             const errors = validation(valuesToValidate, validationOptions)
             const isValid = containsNoErrors(errors)
