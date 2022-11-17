@@ -2,7 +2,7 @@ import { useReducer } from 'react'
 import dotProp from 'dot-prop-immutable'
 import clonedeep from 'lodash.clonedeep'
 import useDeepCompareEffect from 'use-deep-compare-effect'
-import { containsNoErrors } from './utils'
+import { containsNoErrors, flatten } from './utils'
 
 const INITIAL_STATE = {
     values: {},
@@ -19,6 +19,23 @@ const UPDATE_ERRORS = 'UPDATE_ERRORS'
 const VALIDATE = 'VALIDATE'
 const RESET_FORM = 'RESET_FORM'
 
+const getValuesToValidate = (formValues, paths) => {
+    if (!paths.length) {
+        return formValues
+    }
+    return paths.reduce((obj, field) => {
+        const newObj = obj
+        if (field.includes('*')) {
+            const pathParts = field.split('.*.')
+            const [rootPart] = pathParts
+            newObj[rootPart] = dotProp.get(formValues, rootPart)
+        }
+        if (typeof formValues[field] !== 'undefined') {
+            newObj[field] = formValues[field]
+        }
+        return newObj
+    }, {})
+}
 const reducer = (state, action) => {
     const {
         validation,
@@ -60,7 +77,9 @@ const reducer = (state, action) => {
             return dotProp.set(state, 'errors', errors)
         }
         case VALIDATE: {
-            const errors = validation(state.values, validationOptions)
+            const { paths } = action
+            const valuesToValidate = getValuesToValidate(state.values, paths)
+            const errors = validation(valuesToValidate, validationOptions)
             const isValid = containsNoErrors(errors)
             return {
                 ...state,
@@ -169,11 +188,14 @@ const useFormState = (
         setValue(name, finalValue)
     }
 
-    const validate = () => {
-        const errors = validation(state.values, validationOptions)
+    const validate = (paths = []) => {
+        const valuesToValidate = getValuesToValidate(state.values, paths)
+        const errors = validation(valuesToValidate, validationOptions)
+
         const isValid = containsNoErrors(errors)
         dispatch({
             type: VALIDATE,
+            paths,
         })
         return isValid
     }

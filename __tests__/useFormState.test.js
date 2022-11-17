@@ -27,8 +27,8 @@ it('useFormState updates the initial state when the initialValues change.', () =
         (props) => (
             useFormState(props.initialValues, {})
         ), {
-            initialProps: { initialValues },
-        }
+        initialProps: { initialValues },
+    }
     )
     expect(result.current.values.name).toBe(initialValues.name)
     const newInitialValues = {
@@ -48,8 +48,8 @@ it('useFormState does not update the initial state when the dependencies remains
         (props) => (
             useFormState(props.initialValues)
         ), {
-            initialProps: { initialValues },
-        }
+        initialProps: { initialValues },
+    }
     )
     expect(result.current.values.name).toBe(initialValues.name)
     const newInitialValues = {
@@ -448,9 +448,9 @@ it('Validation can handle validationOption changes', () => {
         const [hasPartner, setHasPartner] = useState(true)
         const formState = useFormState(
             initialValues, {
-                validationOptions: { hasPartner },
-                ...options,
-            },
+            validationOptions: { hasPartner },
+            ...options,
+        },
             [hasPartner]
         )
         return {
@@ -513,4 +513,139 @@ it('useFormState doesnt change the object reference from initialValues', () => {
         })
     })
     expect(initialValues.user.isPrimary).toEqual(false)
+})
+
+it('Validation can handle validation specified paths', () => {
+    const initialValues = {
+        name: 'test',
+        addresses: [{
+            street: '',
+        }, {
+            street: '',
+        }],
+    }
+    const message = 'Invalid'
+    const validation = createFormValidation([
+        {
+            path: 'name',
+            validate: (name) => name !== '',
+            message,
+        },
+        {
+            path: 'addresses.*.street',
+            validate: (street) => street !== '',
+            message,
+        },
+    ])
+    const { result } = (
+        renderHook(() => useFormState(initialValues, { validation }))
+    )
+    act(() => {
+        result.current.validate(['name'])
+    })
+    expect(result.current.errors.length).toBe(0)
+})
+
+it('Validation can handle validation specified paths to show error', () => {
+    const initialValues = {
+        name: '',
+        addresses: [{
+            street: '',
+        }, {
+            street: '',
+        }],
+    }
+    const message = 'Invalid'
+    const validation = createFormValidation([
+        {
+            path: 'name',
+            validate: (name) => name !== '',
+            message,
+        },
+        {
+            path: 'addresses.*.street',
+            validate: (street) => street !== '',
+            message,
+        },
+    ])
+
+    const { result } = (
+        renderHook(() => useFormState(initialValues, { validation }))
+    )
+
+    act(() => {
+        result.current.validate(['name'])
+    })
+    expect(Array.isArray(result.current.errors)).toBe(true)
+    expect(result.current.errors).toContainObject({ path: 'name', message })
+    expect(result.current.errors.length).toBe(1)
+})
+
+it('Validation can handle validation specified nested paths to show error', () => {
+    const initialValues = {
+        name: '',
+        addresses: [{
+            street: '',
+        }, {
+            street: '',
+        }],
+    }
+    const message = 'Invalid'
+    const validation = createFormValidation([
+        {
+            path: 'name',
+            validate: (name) => name !== '',
+            message,
+        },
+        {
+            path: 'addresses.*.street',
+            validate: (street) => street !== '',
+            message,
+        },
+    ])
+
+    const { result } = (
+        renderHook(() => useFormState(initialValues, { validation }))
+    )
+
+    act(() => {
+        result.current.validate(['name', 'addresses.*.street'])
+    })
+    expect(result.current.errors).toContainObject({ path: 'name', message })
+    expect(result.current.errors).toContainObject({ path: 'addresses.0.street', message })
+    expect(result.current.errors).toContainObject({ path: 'addresses.1.street', message })
+    expect(result.current.errors.length).toBe(3)
+})
+
+it('Validation can handle validation specified nested paths to validate', () => {
+    const initialValues = {
+        name: 'test',
+        addresses: [{
+            street: 'test',
+        }, {
+            street: 'test',
+        }],
+    }
+    const message = 'Invalid'
+    const validation = createFormValidation([
+        {
+            path: 'name',
+            validate: (name) => name !== '',
+            message,
+        },
+        {
+            path: 'addresses.*.street',
+            validate: (street) => street !== '',
+            message,
+        },
+    ])
+
+    const { result } = (
+        renderHook(() => useFormState(initialValues, { validation }))
+    )
+
+    act(() => {
+        result.current.validate(['name', 'addresses.*.street'])
+    })
+    expect(result.current.errors.length).toBe(0)
 })
