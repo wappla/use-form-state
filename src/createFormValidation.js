@@ -39,20 +39,28 @@ export function createFieldValidation(
                 .reduce(flatten, [])
         }
         const value = dotProp.get(values, path)
-        if (typeof value !== 'undefined' && !validate(value, values, options)) {
-            let finalMessage = defaultMessage
-            if (typeof message === 'function') {
-                finalMessage = message(value, values, options)
-            }
-            if (typeof message !== 'undefined') {
-                finalMessage = message
-            }
+        if (typeof value === 'undefined' || validate(value, values, options)) {
+            return []
+        }
+        const fullPath = composeFullPath(path, parentPath)
+        // if function return function value
+        if (typeof message === 'function') {
             return [{
-                path: composeFullPath(path, parentPath),
-                message: finalMessage,
+                path: fullPath,
+                message: message(value, values, options),
             }]
         }
-        return []
+        // if undefined use default message
+        if (typeof message === 'undefined') {
+            return [{
+                path: fullPath,
+                message: defaultMessage,
+            }]
+        }
+        return [{
+            path: fullPath,
+            message,
+        }]
     }
 }
 

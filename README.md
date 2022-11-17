@@ -169,7 +169,7 @@ See return value of [createFormValidation](#createFormValidation)
 *Default:* empty array
 
 ##### formOptions.validationOptions
-Adds extra options that can be used in the validation. See [validate.validationOptions](#validation.validationOptions) for more info 
+Adds extra options that can be used in the validation. See [validate.validationOptions](#validation.validationOptions) for more info
 
 *Example:*
 ```js
@@ -229,6 +229,7 @@ When set to `true`, `useFormState` will log its state to the console when change
 
 ### createFormValidation
 
+*Example:*
 ```js
 import useFormState, { createFormValidation } from 'use-form-state'
 
@@ -241,7 +242,7 @@ export const FormComponent = () => {
         }, {
             path: 'birthDate',
             validate: (date) => date > new Date(),
-            message: 'Date must be after now.',
+            message: (date) => `Date ${date.toDateString()} must be after now.`,
         }, {
             path: 'vatNumber',
             validate: (vatNumber, values, { isCompany }) => (
@@ -255,30 +256,45 @@ export const FormComponent = () => {
     )
 }
 ```
+`createFormValidation` accepts an array of `formRules`.
 
-#### path
+#### formRule.path
 Required
 
 `path` references the name to the value in the formState where you want to add the validation on.
 
-#### validate
+#### formRule.validate
 Required
 
-Function that validates the given value and returns the result of the expresion.
+Function that validates the given value and returns a boolean result
 
-##### validate.currentValue
+##### currentValue
 The first argument of `validate` is the value from the formState based on the given `path`.
 
-##### validate.allValues
+##### allValues
 Second argument includes all the values from the formState.
 
-##### validate.validationOptions
+##### validationOptions
 `validationOptions` is an optional argument you can use as external "dependency" for your validation expression.
 
-#### message
-The `message` you want to display near the form input to show the user what went wrong.
+#### formRule.message
+
+String or Function.
+
+If a string, the `message` you want to display near the form input to show the user what went wrong.
 
 *Default*: 'Invalid'
+
+If a function, takes same arguments as `validate`, returns the string value for the message.
+
+##### currentValue
+The first argument of `message` is the value from the formState based on the given `path`.
+
+##### allValues
+Second argument includes all the values from the formState.
+
+##### validationOptions
+`validationOptions` is an optional argument you can use as external "dependency" for your message.
 
 ## Contributing
 
@@ -286,7 +302,7 @@ Please read [CONTRIBUTING.md](https://github.com/wappla/use-form-state) for deta
 
 ## Versioning
 
-We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/wappla/use-form-state/tags). 
+We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/wappla/use-form-state/tags).
 
 ## Authors
 
