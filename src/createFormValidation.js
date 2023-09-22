@@ -41,11 +41,11 @@ export function createFieldValidation(
         const value = dotProp.get(values, path)
         if (typeof value !== 'undefined' && !validate(value, values, options)) {
             let finalMessage = defaultMessage
-            if (typeof message === 'function') {
-                finalMessage = message(value, values, options)
-            }
             if (typeof message !== 'undefined') {
                 finalMessage = message
+            }
+            if (typeof message === 'function') {
+                finalMessage = message(value, values, options)
             }
             return [{
                 path: composeFullPath(path, parentPath),
